@@ -59,7 +59,7 @@ class ConfigParams:
 
 def generate_data(n: int, n_projects: int = 5, n_past_hours: int = 24) -> List[Heartbeat]:
     data: List[Heartbeat] = []
-    now: datetime = datetime.today()
+    now: datetime = datetime.now()
     projects: List[str] = [randomword(random.randint(5, 10)) for _ in range(n_projects)]
     languages: List[str] = list(LANGUAGES.keys())
 
@@ -76,13 +76,15 @@ def generate_data(n: int, n_projects: int = 5, n_past_hours: int = 24) -> List[H
             microseconds=random.randint(0, 999)
         )
 
-        data.append(Heartbeat(
-            entity=f'/home/me/dev/{p}/{f}.{LANGUAGES[l]}',
-            project=p,
-            language=l if not '?' in l else None,
-            branch=b,
-            time=(now - delta).timestamp()
-        ))
+        data.append(
+            Heartbeat(
+                entity=f'/home/me/dev/{p}/{f}.{LANGUAGES[l]}',
+                project=p,
+                language=l if '?' not in l else None,
+                branch=b,
+                time=(now - delta).timestamp(),
+            )
+        )
 
     return data
 
@@ -257,7 +259,7 @@ def args_to_params(parsed_args: argparse.Namespace) -> (ConfigParams, bool):
 
 
 def randomword(length: int) -> str:
-    letters = string.ascii_lowercase + 'äöü💩'  # test utf8 and utf8mb4 characters as well
+    letters = f'{string.ascii_lowercase}äöü💩'
     return ''.join(random.choice(letters) for _ in range(length))
 
 
