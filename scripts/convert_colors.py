@@ -6,8 +6,5 @@ import json
 with open(sys.argv[1], 'r') as f:
     colors = json.load(f)
 
-result = {}
-for k, v in colors.items():
-    result[k] = v['color']
-
+result = {k: v['color'] for k, v in colors.items()}
 print(json.dumps(result, indent=4))
